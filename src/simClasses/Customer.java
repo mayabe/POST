@@ -11,7 +11,11 @@ public class Customer {
     private String name;
     private Transaction transaction;
     
-    public Customer(){}
+    
+    public Customer(){
+        name = "";
+        transaction = new Transaction();
+    }
     
     /**
      * Initializes with the next transaction in transaction file, or default if 
