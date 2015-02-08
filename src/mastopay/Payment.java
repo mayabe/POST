@@ -8,22 +8,22 @@ package mastopay;
  * @author tenzinwangchuk
  */
 public class Payment {
-
+    
     /**
      *
      */
     public enum PayType {
-
+        
         /**
          *
          */
-        CASH, 
-
+        CASH,
+        
         /**
          *
          */
-        CREDIT, 
-
+        CREDIT,
+        
         /**
          *
          */
@@ -36,7 +36,12 @@ public class Payment {
      *
      */
     public Payment() { }
-
+    
+    public Payment(int amtTotal, PayType pType) {
+        amountTotal = amtTotal;
+        type = pType;
+    }
+    
     /**
      *
      * @param total
@@ -44,7 +49,7 @@ public class Payment {
     public void setAmountTotal(int total) {
         this.amountTotal = total;
     }
-
+    
     public void setPayType(PayType t) {
         type = t;
     }
@@ -56,7 +61,11 @@ public class Payment {
     public int getAmountTotal() {
         return amountTotal;
     }
-
+    
+    /**
+     *
+     * @return type of payment
+     */
     public PayType getPayType() {
         return type;
     }
