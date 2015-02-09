@@ -22,6 +22,12 @@ public class Post {
 	private boolean valid; // valid upc code
 	private Payment paymentType;
 	private String itemDescription;
+	private Catalog cat;
+	
+	private PostItem postItems[];
+	private int currentIndexOfArray;
+			
+	public static final int MAX_ITEMS = 100;
 	
 //	public Post() {	
 //		customerName = "Bob Lname";
@@ -32,13 +38,21 @@ public class Post {
 //	}
 	
 	
+	public Post() {
+		this.customerName = "";
+		
+	}
 	
 	/**
 	 * Constructor for the post
 	 */
-	public Post(Customer customer) {
+	public Post(String name, Catalog cat) {
 		dateTime = new SimpleDateFormat("yyyy/MM/dd   HH:mm:ss").format(Calendar.getInstance().getTime());
-		customerName = customer.getName;
+		customerName = name;
+		this.cat = cat;
+		
+		postItems = new PostItem[MAX_ITEMS];
+		currentIndexOfArray = 0;
 	}
 	
 	/**
@@ -46,7 +60,7 @@ public class Post {
 	 * @param cat
 	 * @return true is valid UPC
 	 */
-	public boolean validUPC(Catalog cat) {
+	public boolean validUPC(String upc) {
 		valid = cat.verifyUPC(upc);
 		
 		if(valid == false)  {
@@ -54,6 +68,20 @@ public class Post {
 		}
 		
 		return valid;
+	}
+	
+	public void addItem(String upc, int quantity) {
+		if(validUPC(upc) == true) {
+			PostItem item = new PostItem();
+			item.setUPC(upc);
+			item.setItemDescription(itemDescription);
+			item.setQuantity(quantity);
+			item.setUnitPrice(unitPrice);
+			
+			postItems[currentIndexOfArray] = item;
+			currentIndexOfArray++;
+		}
+		
 	}
 	
 	/**
@@ -98,7 +126,12 @@ public class Post {
 	 * Sets the total cost
 	 */
 	public void setTotal() {
-		totalCost = totalCost + extendedPrice;
+		/////////totalCost = totalCost + extendedPrice;
+		
+		// sum up the extended price of all objects in the array
+		for(int i = 0; i < currentIndexOfArray; i++ ) {
+			totalCost = totalCost + postItems[i].getExtendedPrice();
+		}
 	}
 	
 	/**
@@ -144,6 +177,9 @@ public class Post {
 		
 	}
 	
+	/**
+	 * clears everything at the end of a transaction
+	 */
 	public void endTransaction() {
 		
 	}
