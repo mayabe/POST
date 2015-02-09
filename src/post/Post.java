@@ -160,8 +160,8 @@ public class Post {
 	 * @param pay
 	 */
 	public void setPaymentMethod(Payment pay) {
-        paymentType.setPayType(pay.getPayType());
-    }
+		paymentType.setPayType(pay.getPayType());
+	}
 	
 	
 	/**
@@ -173,9 +173,17 @@ public class Post {
 		System.out.println(customerName + "     " + dateTime);
 		
 		//List items, price, quantity, etc here
+		for(int i = 0; i < currentIndexOfArray; i++) {
+			System.out.println(postItems[i].getItemDescription() + "   " + postItems[i].getQuantity() + "   " + postItems[i].getUnitPrice() + "   " + postItems[i].getExtendedPrice());
+		}
 		
 		System.out.println("------");
+		
+		// Calculates total cost
+		setTotal();
 		System.out.println("Total $" + totalCost);
+		
+		// Payment type and and amount returned
 		System.out.println("Amount Tendered: $" + amountTendered + "	Paid by --- << GET PAYMENT TYPE HERE >>");
 		System.out.println("Amount Returned: $" + amountReturned + "\n");
 		
@@ -185,7 +193,33 @@ public class Post {
 	 * clears everything at the end of a transaction
 	 */
 	public void endTransaction() {
+		customerName = "";
+		dateTime = "";
+
+		upc = "";
+		quantity = 0;
+		unitPrice = 0.00;
+		extendedPrice = 0.00;
+
+		totalCost = 0.00;
+		amountTendered = 0.00;
+		amountReturned = 0.00;
+
+		valid = false; 
+		paymentType = null;
+		itemDescription = "";
 		
+		// Clears the array of all Items
+		for(int i = 0; i < currentIndexOfArray; i++) {
+			postItems[i] = null;
+		}
+		
+		// Resets the index to 0 for the next transaction
+		currentIndexOfArray = 0;
+		
+		
+		// do i need this line?
+		cat = null;
 	}
 	
 
