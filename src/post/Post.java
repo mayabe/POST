@@ -23,8 +23,9 @@ public class Post {
 	private double amountTendered;
 	private double amountReturned;
 	
-	private boolean valid; // valid upc code
+	private int valid; // valid upc code
 	private Payment paymentType;
+	private String paymentTypeString;	// String: Amount tendered and Payment type
 	private String itemDescription;
 	private Catalog cat;
 	
@@ -43,7 +44,6 @@ public class Post {
 	
 	
 	public Post() {
-		this.customerName = "";
 		
 	}
 	
@@ -51,12 +51,29 @@ public class Post {
 	 * Constructor for the post
 	 */
 	public Post(String name, Catalog cat) {
-		dateTime = new SimpleDateFormat("yyyy/MM/dd   HH:mm:ss").format(Calendar.getInstance().getTime());
+
+		dateTime = "";
+		
 		customerName = name;
 		this.cat = cat;
 		
+		upc = "";
+		quantity = 0;
+		unitPrice = 0.00;
+		extendedPrice = 0.00;
+		
+		totalCost = 0.00;
+		amountTendered = 0.00;
+		amountReturned = 0.00;
+		
+		valid = false; 
+		paymentType = new Payment();
+		paymentTypeString = "";
+		itemDescription = "";
+		
 		postItems = new PostItem[MAX_ITEMS];
 		currentIndexOfArray = 0;
+		
 	}
 	
 	/**
@@ -64,18 +81,29 @@ public class Post {
 	 * @param cat
 	 * @return true is valid UPC
 	 */
-	public boolean validUPC(String upc) {
+	
+//	public boolean validUPC(String upc) {
+//		valid = cat.verifyUPC(upc);
+//		
+//		if(valid == false)  {
+//			System.out.println("Invalid UPC");
+//		}
+//		
+//		return valid;
+//	}
+	
+	public int validUPC(String upc) {
 		valid = cat.verifyUPC(upc);
 		
-		if(valid == false)  {
+		if(valid == -1)  {	// invalid, not in array
 			System.out.println("Invalid UPC");
 		}
 		
-		return valid;
+		return valid;	// index of item in catalog? -brian's catalog.java
 	}
 	
 	public void addItem(String upc, int quantity) {
-		if(validUPC(upc) == true) {
+		if(validUPC(upc) >= 0) {	// 0 or greater is valid, -1 is not valid
 			PostItem item = new PostItem();
 			item.setUPC(upc);
 			item.setItemDescription(itemDescription);
@@ -110,15 +138,16 @@ public class Post {
 		return unitPrice;
 	}
 	
-	/**
-	 * Set the quantity purchased
-	 */
-	public void setQuantity() {
-		
-		// get quantity from customer?
-		
-	}
-	
+												// No longer need I think
+												/**
+												 * Set the quantity purchased
+												 */
+												//public void setQuantity() {
+													
+													// get quantity from customer?
+													
+												//}
+												
 	/**
 	 * Sets the extended price (unit price * quantity)
 	 */
@@ -139,6 +168,13 @@ public class Post {
 	}
 	
 	/**
+	 * Calculates the amount returned
+	 */
+	public void setAmountReturned() {
+		amountReturned = amountTendered - totalCost;
+	}
+	
+	/**
 	 * Gets the extended price
 	 * @return
 	 */
@@ -155,12 +191,40 @@ public class Post {
 	}
 	
 	/**
+	 * Gets the amount returned
+	 * @return
+	 */
+	public double getAmountReturned() {
+		return amountReturned;
+	}
+	
+	/**
 	 * Gets the payment type from Pay class and
-	 * Sets paymentType to that type
+	 * Sets paymentType to that type paymentTypeString
 	 * @param pay
 	 */
 	public void setPaymentMethod(Payment pay) {
 		paymentType.setPayType(pay.getPayType());
+		
+		// Payment type is CASH
+		if(paymentType == PayType.CASH) {
+			paymentType.setAmountTotal(pay.getAmountTotal());
+			amountTendered = paymentType.getAmountTotal();
+			paymentTypeString = "Amount Tendered: " + amountTendered + " Paid by Cash";
+		}
+		//Payment type is CHECK
+		else if(paymentType == PayType.CHECK) {
+			paymentType.setAmountTotal(pay.getAmountTotal());
+			amountTendered = paymentType.getAmountTotal();
+			paymentTypeString = "Amount Tendered: " + amountTendered + " Paid by Check";
+		}
+		// Payment type is CREDIT
+		else {
+			paymentType.setAmountTotal(totalCost);
+			amountTendered = paymentType.getAmountTotal();
+			paymentType.setCardNumber(pay.getCardNumber());
+			paymentTypeString = "Amount Tendered: " + amountTendered + " Paid by Credit Card " + paymentType.getCardNumber();
+		}
 	}
 	
 	
@@ -170,6 +234,7 @@ public class Post {
 	public void printInvoice() {
 		
 		System.out.println("<< Store Name Goes Here >>\n");
+		dateTime = new SimpleDateFormat("yyyy/MM/dd   HH:mm:ss").format(Calendar.getInstance().getTime());
 		System.out.println(customerName + "     " + dateTime);
 		
 		//List items, price, quantity, etc here
@@ -181,11 +246,14 @@ public class Post {
 		
 		// Calculates total cost
 		setTotal();
-		System.out.println("Total $" + totalCost);
+		System.out.println("Total $" + getTotal());
 		
-		// Payment type and and amount returned
-		System.out.println("Amount Tendered: $" + amountTendered + "	Paid by --- << GET PAYMENT TYPE HERE >>");
-		System.out.println("Amount Returned: $" + amountReturned + "\n");
+		// Amount tendered and Payment type
+		System.out.println(paymentTypeString);
+		
+		// Calculates amount returned
+		setAmountReturned();
+		System.out.println("Amount Returned: $" + getAmountReturned() + "\n");
 		
 	}
 	
@@ -207,6 +275,7 @@ public class Post {
 
 		valid = false; 
 		paymentType = null;
+		paymentTypeString = "";
 		itemDescription = "";
 		
 		// Clears the array of all Items
