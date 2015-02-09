@@ -10,4 +10,8 @@ package mastopay;
  */
 public class Catalog {
     
+    public boolean verifyUPC(String upc) { //placeholder
+        return true;
+    }
+    
 }

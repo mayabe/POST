@@ -10,11 +10,12 @@ public class Customer {
     
     private String name;
     private Transaction transaction;
-    
+    private TransactionReader tReader;
     
     public Customer(){
         name = "";
         transaction = new Transaction();
+        tReader = null;
     }
     
     /**
@@ -22,21 +23,34 @@ public class Customer {
      * file is empty, or eof has been reached
      * @param transactionFile 
      */
-    public Customer(String transactionFile){}
+    public Customer(String transactionFile){
+        tReader = new TransactionReader("transaction.txt");
+        transaction = tReader.getNextTransaction();
+        name = transaction.getName();
+    }
     
     /**
      * Gets the next transaction from a transaction file
      * @param transactionFile
      * @return true if successful, false if eof has been reached or empty file
      */
-    public boolean getTransaction(String transactionFile){return true;}
+    public boolean getTransaction(String transactionFile){
+        transaction = tReader.getNextTransaction();
+        name = transaction.getName();
+        return transaction.getPaymentType() != null;
+    }
     
     /**
      * Simulates a customer performing a transaction 
      * @return true if transaction was successfully performed
      */
-    public boolean performTransaction(){return true;}
+    public boolean performTransaction(){
+        // use post methods here to perform a transaction
+        return true;
+    }
     
-    
+    public void leaveStore() {
+        tReader.close();
+    }
     
 }

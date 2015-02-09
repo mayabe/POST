@@ -39,19 +39,28 @@ public class Transaction {
             transItems[i] = new TransactionItem(items[i]);
         }
         
-        payment = new Payment();
-        payment.setAmountTotal(pay.getAmountTotal());
-        //payment type
+        payment = new Payment(pay);
+        
     }
-
+    
+    public boolean addItem(TransactionItem item) {
+        if(MAX_ITEMS > (numTransItems + 1)) {
+            transItems[numTransItems] = item;
+            numTransItems++;
+            return true;
+        }
+        System.err.print("Error: setItem() failed. Number of items exceeds "+ MAX_ITEMS + ". ");
+        return false;
+    }
+    
     public String getName() {
         return customerName;
     }
     
     /**
-     * 
+     *
      * @param i
-     * @return TransactionItem at index i, or an empty TransactionItem if i is  
+     * @return TransactionItem at index i, or an empty TransactionItem if i is
      * not a valid index
      */
     public TransactionItem getItem(int i) {
@@ -66,25 +75,35 @@ public class Transaction {
         return numTransItems;
     }
     
-//    public Payment getPayment() {}
-   
+    public double getPaymentAmount() {
+        return payment.getAmountTotal();
+    }
+    
+    public Payment.PayType getPaymentType() {
+        return payment.getPayType();
+    }
+    
+    public String getPaymentCard() {
+        return payment.getCardNumber();
+    }
+    
     public void setName(String name) {
         customerName = name;
     }
-  
+    
     public boolean setItem(int index, TransactionItem item) {
         if(isLegalIndex(index)) {
             transItems[index] = item;
             return true;
         }
         System.err.print("Error: setItem() failed. Index out of bounds. ");
-        return false;  
+        return false;
     }
     
     public boolean setAllItems(TransactionItem items[], int numItems) {
         if(numItems < MAX_ITEMS) {
-           numTransItems = numItems;
-           return true;
+            numTransItems = numItems;
+            return true;
         } else if(numItems < 0 ) {
             numTransItems = 0;
         } else {
@@ -97,12 +116,22 @@ public class Transaction {
         if(numItems > MAX_ITEMS) {
             System.err.print("Error: setNumItems() failed. Value exceeds maximum. Maximum is " + MAX_ITEMS +".");
             return false;
-        } 
+        }
         numTransItems = numItems;
         return true;
     }
     
-//    public void setPayment(Payment pay) {}
+    public void setPaymentAmount(double amt) {
+        payment.setAmountTotal(amt);
+    }
+    
+    public void setPaymentType(Payment.PayType pType) {
+        payment.setPayType(pType);
+    }
+    
+    public void setPaymentCard(String card) {
+        payment.setCardNumber(card);
+    }
     
     public boolean isEmpty() {
         return numTransItems == 0;

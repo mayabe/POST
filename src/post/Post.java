@@ -1,5 +1,9 @@
+package post;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import mastopay.*;
+
 
 /**
  * @author Ray
@@ -90,7 +94,7 @@ public class Post {
 	 * @return
 	 */
 	public String getItemDescription(ProductSpec ProdSpecs) {
-		itemDescription = ProdSpecs.getDescription(upc);
+		itemDescription = ProdSpecs.getDescription();
 		
 		return itemDescription;
 	}
@@ -101,7 +105,7 @@ public class Post {
 	 * @return
 	 */
 	public double getUnitPrice(ProductSpec ProdSpecs) {
-		unitPrice = ProdSpecs.getPrice(upc);
+		unitPrice = ProdSpecs.getPrice();
 		
 		return unitPrice;
 	}
@@ -156,8 +160,8 @@ public class Post {
 	 * @param pay
 	 */
 	public void setPaymentMethod(Payment pay) {
-		paymentType = pay.getPayType();
-	}
+        paymentType.setPayType(pay.getPayType());
+    }
 	
 	
 	/**
