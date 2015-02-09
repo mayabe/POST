@@ -1,1 +1,9 @@
-1234     product description      1234.50
+1234     product description!     1234.50
+2846     PRODUCT description?     4827.69
+6482     product                  5641.56
+7412     A description!           12.50
+8521     PRODUCT                  498.69
+9745     produPTION!              5851.56
+8569     GoPro                    524.50
+9963     PRODUCT description?     8542.69
+8585     MY DESCRIPTION!          7251.56
