@@ -75,6 +75,11 @@ public class Transaction {
         return numTransItems;
     }
     
+    public Payment getPayment() {
+        Payment pay = new Payment(payment);
+        return pay;
+    }
+    
     public double getPaymentAmount() {
         return payment.getAmountTotal();
     }

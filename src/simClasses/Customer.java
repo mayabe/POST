@@ -1,6 +1,8 @@
 
 package simClasses;
 
+import post.Post;
+
 /**
  * Customer class simulates an actual customer performing a transaction using 
  * Post 
@@ -31,21 +33,37 @@ public class Customer {
     
     /**
      * Gets the next transaction from a transaction file
-     * @param transactionFile
      * @return true if successful, false if eof has been reached or empty file
      */
-    public boolean getTransaction(String transactionFile){
+    public boolean getTransaction(){
         transaction = tReader.getNextTransaction();
         name = transaction.getName();
         return transaction.getPaymentType() != null;
     }
     
     /**
-     * Simulates a customer performing a transaction 
+     * Simulates a customer performing a transaction
+     *
+     * @pre The customer must have a transaction prior to calling this method
+     * @param post
      * @return true if transaction was successfully performed
      */
-    public boolean performTransaction(){
+    public boolean performTransaction(Post post){
+        if(transaction == null) {
+            System.err.println("Error: (performTransaction) No transaction information.");
+            return false;
+        }
         // use post methods here to perform a transaction
+        
+        //post.setName(name);
+        for (int i = 0; i < transaction.getNumItems(); i++) {
+            String item = transaction.getItem(i).getUPC();
+            int quantity = transaction.getItem(i).getQuantity();
+            post.addItem(item, quantity);
+        }
+        post.setPaymentMethod(transaction.getPayment());
+        post.printInvoice();
+        post.endTransaction();
         return true;
     }
     
