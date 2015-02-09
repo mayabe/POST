@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package mastopay;
 
 /**
@@ -9,10 +5,14 @@ package mastopay;
  * @author Synonic
  */
 public class ProductSpec {
-     int productUPC = 0000;
-     String productDescription = "";
-     double productPrice = 0.0;
+     private int productUPC = 0000;
+     private String productDescription = "";
+     private double productPrice = 0.0;
      
+     //Default Constructor
+     public ProductSpec() {}
+     
+     //Main Constructor for ProductSpec
      public ProductSpec(int productUPC, String productDescription, double productPrice) {
          this.productUPC = productUPC;
          this.productDescription = productDescription;
@@ -31,16 +31,24 @@ public class ProductSpec {
          return productPrice;
      }
      
-     public void setProductUPC() {
-         productUPC = 1234;
+     public void setProductUPC(int productUPC) {
+         this.productUPC = productUPC;
      }
      
-     public void setProductDescription() {
-         productDescription = "";
+     public void setProductDescription(String productDescription) {
+         this.productDescription = productDescription;
      }
      
-     public void setProductPrice() {
-         productPrice = 0.0;
+     public void setProductPrice(double productPrice) {
+         this.productPrice = productPrice;
      }
      
+     //Main method for testing individual file       **REMOVABLE**
+     public static void main(String []args) {
+         ProductSpec item1 = new ProductSpec(1234, "Hello World", 25);
+         System.out.println(item1.getProductPrice());
+         System.out.println(item1.getProductDescription());
+         item1.setProductDescription("I wrote a new Description");
+         System.out.println(item1.getProductDescription());
+     }//end main
 }
