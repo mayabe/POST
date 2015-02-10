@@ -5,7 +5,7 @@ package mastopay;
 
 /**
  *
- * @author Maya
+ * @author tenzinwangchuk
  */
 public class Store {
     
@@ -48,11 +48,19 @@ public class Store {
         return catalog.getProduct(upc);
     }
     
+    public String getProductDescription(String upc) {
+        return catalog.getProduct(upc).getProductDescription();
+    }
+    
+    public double getProductPrice(String upc) {
+        return catalog.getProduct(upc).getProductPrice();
+    }
+    
     public void initCatalog(String productFile) {
         //catalog = new Catalog(String productFile);
     }
     
-    public boolean validUPC(String upc) {
+    public boolean verify(String upc) {
         return catalog.verifyUPC(upc) > -1;
     }
     
