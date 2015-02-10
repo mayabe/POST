@@ -18,8 +18,8 @@ public class Manager {
     /**
      *
      */
-    public void openStore() {
-      
+    public void openStore(Store str) {
+      str.setStoreName(str.getStoreName());
     }
     
     /**
