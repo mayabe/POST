@@ -3,37 +3,27 @@
  *
  */
 package mastopay;
-
+import post.*;
+import simClasses.*;
 /**
  *
- * @author tenzinwangchuk
+ * @author Maya
  */
 public class Manager {
     
-    /**
-     *
-     */
-    public Manager() { }
-   
-    /**
-     *
-     */
-    public void openStore(Store str) {
-      str.setStoreName(str.getStoreName());
-    }
-    
-    /**
-     *
-     */
-    public void setPost() {
-        
-    }
-    
-    /**
-     *
-     */
-    public void initCatalog() {
-        
+    public static void main(String[] args) {
+        Store testStore = new Store();
+        testStore.initCatalog("products.txt");
+        Post post = new Post();
+        if(testStore.openStore()){
+            Customer customer = new Customer("transaction.txt");
+            customer.performTransaction(post);
+            while(customer.getTransaction()){
+                customer.performTransaction(post);
+            }
+            customer.leaveStore();
+        }
+        testStore.closeStore();;
     }
     
 }

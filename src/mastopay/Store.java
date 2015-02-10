@@ -3,30 +3,37 @@
  */
 package mastopay;
 
-
-import post;
-import Catalog;
-
-
 /**
  *
- * @author tenzinwangchuk
+ * @author Maya
  */
 public class Store {
     
     private String storeName;
-   
+    private Catalog catalog;
+    private boolean open;
+    
     /**
      *
      */
-    public Store() { }
+    public Store() {
+        storeName = "";
+        catalog = null;
+        open = false;
+    }
+    
+    public Store(String name, String productFile){
+        storeName = name;
+        catalog = new Catalog();//(String productFile);
+        open = false;
+    }
     
     /**
      *
      * @param newStoreName
      */
     public void setStoreName(String newStoreName) {
-        this.storeName = newStoreName;
+        storeName = newStoreName;
     }
     
     /**
@@ -36,30 +43,32 @@ public class Store {
     public String getStoreName() {
         return storeName;
     }
-   
-    public void catalogInfo(Manager man) {
-        man.initCatalog();
-        
-        }
-        
-    public void checkUPC(Post post, String upc) {
-        post.validUPC(upc);
+    
+    public ProductSpec getProduct(String upc) {
+        return catalog.getProduct(upc);
     }
     
-    public void priceCheck(String itemUpc, Post post, ProductSpec[] productList)  {
-        boolean checkUpc = post.validUPC(itemUpc);
-        if(checkUpc) {
-            for (ProductSpec productList1 : productList) {
-                if (itemUpc == productList1.getProductUPC()) {
-                    double price = productList1.getProductPrice();
-                    System.out.println("Price is " +price);
-                } else {
-                    System.out.println("UPC not match");
-                }
-                {
-                    System.out.println("UPC Invalid");
-                }   }
-        }
-       
+    public void initCatalog(String productFile) {
+        //catalog = new Catalog(String productFile);
+    }
     
+    public boolean validUPC(String upc) {
+        return catalog.verifyUPC(upc) > -1;
+    }
+    
+    public boolean openStore() {
+        if(catalog != null) {
+            open = true;
+        }
+        return open;
+    }
+    
+    public void closeStore() {
+        catalog = null;
+        open = true;
+    }
+    
+    public boolean isOpen(){
+        return open;
+    }
 }

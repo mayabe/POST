@@ -4,8 +4,8 @@ package simClasses;
 import post.Post;
 
 /**
- * Customer class simulates an actual customer performing a transaction using 
- * Post 
+ * Customer class simulates an actual customer performing a transaction using
+ * Post
  * @author Maya Gautschi
  */
 public class Customer {
@@ -21,9 +21,9 @@ public class Customer {
     }
     
     /**
-     * Initializes with the next transaction in transaction file, or default if 
+     * Initializes with the next transaction in transaction file, or default if
      * file is empty, or eof has been reached
-     * @param transactionFile 
+     * @param transactionFile
      */
     public Customer(String transactionFile){
         tReader = new TransactionReader("transaction.txt");
@@ -38,7 +38,7 @@ public class Customer {
     public boolean getTransaction(){
         transaction = tReader.getNextTransaction();
         name = transaction.getName();
-        return transaction.getPaymentType() != null;
+        return transaction.getNumItems() != 0; //getPaymentType() != null;
     }
     
     /**
@@ -52,10 +52,12 @@ public class Customer {
         if(transaction == null) {
             System.err.println("Error: (performTransaction) No transaction information.");
             return false;
+        } else if (transaction.getNumItems() == 0) {
+            return false;
         }
         // use post methods here to perform a transaction
         
-        //post.setName(name);
+        //post.setCustomerName(name);
         for (int i = 0; i < transaction.getNumItems(); i++) {
             String item = transaction.getItem(i).getUPC();
             int quantity = transaction.getItem(i).getQuantity();
