@@ -239,7 +239,7 @@ public class Post {
      */
     public void printInvoice() {
         
-        System.out.println("<< Store Name Goes Here >>\n");
+        System.out.println(store.getStoreName() + "\n");
         dateTime = new SimpleDateFormat("yyyy/MM/dd   HH:mm:ss").format(Calendar.getInstance().getTime());
         System.out.println(customerName + "     " + dateTime);
         
