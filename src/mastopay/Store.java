@@ -37,10 +37,15 @@ public class Store {
         return storeName;
     }
    
-        public void catalogInfo(Manager man) {
+    public void catalogInfo(Manager man) {
         man.initCatalog();
         
         }
+        
+    public void checkUPC(Post post, String upc) {
+        post.validUPC(upc);
+    }
+    
     public void priceCheck(String itemUpc, Post post, ProductSpec[] productList)  {
         boolean checkUpc = post.validUPC(itemUpc);
         if(checkUpc) {
