@@ -23,11 +23,12 @@ public class Post {
 	private double amountTendered;
 	private double amountReturned;
 	
-	private int valid; // valid upc code
+	private boolean valid; // valid or invalid upc code
 	private Payment paymentType;
 	private String paymentTypeString;	// String: Amount tendered and Payment type
 	private String itemDescription;
-	private Catalog cat;
+	
+	private Store store;
 	
 	private PostItem postItems[];
 	private int currentIndexOfArray;
@@ -50,12 +51,13 @@ public class Post {
 	/**
 	 * Constructor for the post
 	 */
-	public Post(String name, Catalog cat) {
+	public Post(Store store) {
+		
+		this.store = store;
 
 		dateTime = "";
 		
 		customerName = name;
-		this.cat = cat;
 		
 		upc = "";
 		quantity = 0;
@@ -81,34 +83,31 @@ public class Post {
 	 * @param cat
 	 * @return true is valid UPC
 	 */
-	
-//	public boolean validUPC(String upc) {
-//		valid = cat.verifyUPC(upc);
-//		
-//		if(valid == false)  {
-//			System.out.println("Invalid UPC");
-//		}
-//		
-//		return valid;
-//	}
-	
-	public int validUPC(String upc) {
-		valid = cat.verifyUPC(upc);
+	public boolean validUPC(String upc) {
+		valid = store.verifyUPC(upc);
 		
-		if(valid == -1)  {	// invalid, not in array
+		if(valid == false)  {	// invalid
 			System.out.println("Invalid UPC");
 		}
 		
-		return valid;	// index of item in catalog? -brian's catalog.java
+		return valid;
 	}
 	
+	/**
+	 * Creates an item and adds it to postItems[], array of items
+	 * @param upc
+	 * @param quantity
+	 */
 	public void addItem(String upc, int quantity) {
-		if(validUPC(upc) >= 0) {	// 0 or greater is valid, -1 is not valid
+		if(validUPC(upc) == true) {	
 			PostItem item = new PostItem();
 			item.setUPC(upc);
-			item.setItemDescription(itemDescription);
+			
+			item.setItemDescription(getItemDescription(upc));
+			
 			item.setQuantity(quantity);
-			item.setUnitPrice(unitPrice);
+			
+			item.setUnitPrice(getUnitPrice(upc));
 			
 			postItems[currentIndexOfArray] = item;
 			currentIndexOfArray++;
@@ -121,8 +120,8 @@ public class Post {
 	 * @param ProdSpecs
 	 * @return
 	 */
-	public String getItemDescription(ProductSpec ProdSpecs) {
-		itemDescription = ProdSpecs.getDescription();
+	public String getItemDescription(String upc) {
+		itemDescription = store.getProductDescription(upc);
 		
 		return itemDescription;
 	}
@@ -132,8 +131,8 @@ public class Post {
 	 * @param ProdSpecs
 	 * @return
 	 */
-	public double getUnitPrice(ProductSpec ProdSpecs) {
-		unitPrice = ProdSpecs.getPrice();
+	public double getUnitPrice(String upc) {
+		unitPrice = store.getPrice();
 		
 		return unitPrice;
 	}
@@ -147,6 +146,13 @@ public class Post {
 													// get quantity from customer?
 													
 												//}
+	
+	/**
+	 * Sets customer name
+	 */
+	public void setCustomerName(String name) {
+		customerName = name;
+	}
 												
 	/**
 	 * Sets the extended price (unit price * quantity)
@@ -207,13 +213,13 @@ public class Post {
 		paymentType.setPayType(pay.getPayType());
 		
 		// Payment type is CASH
-		if(paymentType == PayType.CASH) {
+		if(paymentType == paymentType.PayType.CASH) {
 			paymentType.setAmountTotal(pay.getAmountTotal());
 			amountTendered = paymentType.getAmountTotal();
 			paymentTypeString = "Amount Tendered: " + amountTendered + " Paid by Cash";
 		}
 		//Payment type is CHECK
-		else if(paymentType == PayType.CHECK) {
+		else if(paymentType == paymentType.PayType.CHECK) {
 			paymentType.setAmountTotal(pay.getAmountTotal());
 			amountTendered = paymentType.getAmountTotal();
 			paymentTypeString = "Amount Tendered: " + amountTendered + " Paid by Check";
@@ -286,9 +292,6 @@ public class Post {
 		// Resets the index to 0 for the next transaction
 		currentIndexOfArray = 0;
 		
-		
-		// do i need this line?
-		cat = null;
 	}
 	
 
