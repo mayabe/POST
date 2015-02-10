@@ -3,6 +3,11 @@
  */
 package mastopay;
 
+
+import post;
+import Catalog;
+
+
 /**
  *
  * @author tenzinwangchuk
@@ -10,11 +15,7 @@ package mastopay;
 public class Store {
     
     private String storeName;
-    
-    // private Catalog catalog;
-    
-    // private Post post;
-    
+   
     /**
      *
      */
@@ -36,7 +37,24 @@ public class Store {
         return storeName;
     }
    
-    
+        public void catalogInfo(Manager man) {
+        man.initCatalog();
+        
+        }
+    public void priceCheck(String itemUpc, Post post, ProductSpec[] productList)  {
+        boolean checkUpc = post.validUPC(itemUpc);
+        if(checkUpc) {
+            for (ProductSpec productList1 : productList) {
+                if (itemUpc == productList1.getProductUPC()) {
+                    double price = productList1.getProductPrice();
+                    System.out.println("Price is " +price);
+                } else {
+                    System.out.println("UPC not match");
+                }
+                {
+                    System.out.println("UPC Invalid");
+                }   }
+        }
        
     
 }
